@@ -31,6 +31,10 @@ jobs:
     if: always()
     needs: node_modules
     runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        node-version: [12.x, 14.x, 16.x]
     name: "project_build"
     
     steps:
