@@ -10,24 +10,34 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  node_modules:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-
-
         node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    name: "installation"
+        
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+    - run: npm i
+  
+  build:
+    if: always()
+    needs: node_modules
+    runs-on: ${{ matrix.os }}
+    name: "project_build"
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
     - run: npm i
     - run: npm run build --if-present
