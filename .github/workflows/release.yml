@@ -30,7 +30,7 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           filename: win.zip
-          exclusions: '*.git* /*node_modules/* .editorconfig locales resources shiftshaders .html .bin .dll'
+          exclusions: '*.git* /*node_modules/* .editorconfig /*locales/* /*resources/* /*shiftshaders/* *.html* *.bin* *.dll*'
       - name: Create Github Release
         id: create-new-release
         uses: actions/create-release@v1
