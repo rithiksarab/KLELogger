@@ -1,12 +1,16 @@
 {
   "name": "klelogger",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "electron": "electron .",
+    "electron-build": "ng build && npm run electron",
+    "pack-win": "electron-packager ./ --platform win32 --out ./apps --overwite"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +22,8 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "custom-electron-titlebar": "^3.2.7",
+    "electron-builder": "^22.13.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -28,6 +34,8 @@
     "@angular/compiler-cli": "~12.2.0",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
+    "electron": "^15.3.0",
+    "electron-packager": "^15.4.0",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
