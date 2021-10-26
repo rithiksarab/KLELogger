@@ -35,9 +35,9 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            tag_name: v${{ secrets.run_number }}
-            release_name: Release V${{ secrets.run_number }}
+        with:
+          tag_name: v${{ secrets.run_number }}
+          release_name: Release V${{ secrets.run_number }}
       - name: Upload Asset to Github Release
         uses: actions/upload-release-asset@v1
         env:
