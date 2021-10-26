@@ -8,7 +8,7 @@ function createWindow () {
     width: 2100, 
     height: 2100,
     backgroundColor: '#fff',
-    icon: `file://${__dirname}/dist//KLELogger/favicon.ico`,
+    icon: `file://${__dirname}/dist/KLELogger/favicon.ico`,
     // titleBarStyle: 'hidden',
     // frame: false
   })
