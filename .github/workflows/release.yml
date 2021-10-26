@@ -3,7 +3,7 @@ on: push
 jobs:
   build-project:
     name: Build Win application
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
 
   release-project:
     name: Release WinBuild
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build-project
     steps:
       - name: Download Site Content
