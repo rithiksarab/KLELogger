@@ -25,7 +25,7 @@ jobs:
       - name: Download Site Content
         uses: actions/download-artifact@v2
         with:
-          name: EBuildWin
+          name: Application Upload
       - name: Archive Content
         uses: thedoctor0/zip-release@master
         with:
