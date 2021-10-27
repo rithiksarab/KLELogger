@@ -40,27 +40,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm i
     - run: npm run build
-  
-  test:
-    if: always()
-    needs: [node_modules, build]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-        node-version: [  16.x ]
-    name: "Testing the Code"
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i
-    - run: npm run test
-    - name: Test Status
-      run: |
-          echo Success!
 
   genrate-application:
     name: Generate Application
@@ -110,6 +89,7 @@ jobs:
             asset_content_type: application/zip
 
   deploy:
+      name: Deploy Application
       needs: [node_modules, build, test, release-project, genrate-application]
       runs-on: ${{ matrix.os }}
       strategy:
