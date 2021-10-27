@@ -30,15 +30,15 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           filename: win.zip
-          exclusions: '*.git* /*node_modules/* .editorconfig /*locales/* /*resources/* /*shiftshaders/* *.html* *.bin* *.dll*'
+          exclusions: '*.git* /*node_modules/* .editorconfig'
       - name: Create Github Release
         id: create-new-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ secrets.run_number }}
-          release_name: Release V${{ secrets.run_number }}
+          tag_name: v${{ github.run_number }}
+          release_name: Release V${{ github.run_number }}
       - name: Upload Asset to Github Release
         uses: actions/upload-release-asset@v1
         env:
