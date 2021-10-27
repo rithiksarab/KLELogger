@@ -9,7 +9,6 @@ on:
 jobs:
   node_modules:
     runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
         os: [ ubuntu-latest ]
