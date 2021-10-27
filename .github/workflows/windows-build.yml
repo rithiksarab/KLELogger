@@ -59,7 +59,8 @@ jobs:
     - run: npm i
     - run: ng test
     - name: Test Status
-        run: echo 'Success'
+      run: |
+          echo Success!
 
   genrate-application:
     name: Generate Application
