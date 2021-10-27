@@ -1,0 +1,139 @@
+name: Windows Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  node_modules:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ windows-latest ]
+        node-version: [ 12.x, 14.x, 16.x ]
+    name: "Setting Up Enviroment"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Using Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm i
+  
+  build:
+    if: always()
+    needs: node_modules
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest ]
+        node-version: [ 12.x, 14.x, 16.x ]
+    name: "Building the Project"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm i
+    - run: npm run build
+  
+  test:
+    if: always()
+    needs: [node_modules, build]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest ]
+        node-version: [ 12.x, 14.x, 16.x ]
+    name: "Testing the Code"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm i
+    - run: ng test
+    - name: Test Status
+        run: echo 'Success'
+
+  genrate-application:
+    name: Generate Application
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Dependecies
+        run: npm i
+      - name: Generate Application
+        run: npm run pack-win
+      - name: Upload Content
+        uses: actions/upload-artifact@v2
+        with:
+          name: Application Upload
+          path: apps/klelogger-win32-x64
+
+  release-project:
+      name: Release Application
+      runs-on: windows-latest
+      needs: genrate-application
+      steps:
+        - name: Download Site Content
+          uses: actions/download-artifact@v2
+          with:
+            name: Application Upload
+        - name: Archive Content
+          uses: thedoctor0/zip-release@master
+          with:
+            filename: win.zip
+            exclusions: '*.git* /*node_modules/* .editorconfig'
+        - name: Create Github Release
+          id: create-new-release
+          uses: actions/create-release@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            tag_name: v${{ github.run_number }}
+            release_name: Release V${{ github.run_number }}
+        - name: Upload Asset to Github Release
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ steps.create-new-release.outputs.upload_url }} 
+            asset_path: ./win.zip
+            asset_name: ELogger-V${{ github.run_number }}.zip
+            asset_content_type: application/zip
+
+  deploy:
+      needs: [node_modules, build, test, release-project, genrate-application]
+      runs-on: ${{ matrix.os }}
+      strategy:
+        matrix:
+          os: [ windows-latest]
+          node-version: [ 12.x, 14.x, 16.x ]
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy
+        if: success()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/

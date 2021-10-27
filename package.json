@@ -10,7 +10,9 @@
     "test": "ng test",
     "electron": "electron .",
     "electron-build": "ng build && npm run electron",
-    "pack-win": "electron-packager ./ --platform win32 --out ./apps --overwite"
+    "pack-win": "electron-packager ./ --platform win32 --out ./apps --overwite",
+    "pack-darwin": "electron-packager ./ --platform darwin --out ./apps --overwite",
+    "pack-linux": "electron-packager ./ --platform linux --out ./apps --overwite"
   },
   "private": true,
   "dependencies": {
