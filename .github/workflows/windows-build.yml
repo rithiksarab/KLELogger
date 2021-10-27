@@ -57,7 +57,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm i
-    - run: ng test
+    - run: npm run test
     - name: Test Status
       run: |
           echo Success!
@@ -91,7 +91,6 @@ jobs:
           uses: thedoctor0/zip-release@master
           with:
             filename: win.zip
-            exclusions: '*.git* /*node_modules/* .editorconfig'
         - name: Create Github Release
           id: create-new-release
           uses: actions/create-release@v1
