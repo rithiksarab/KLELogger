@@ -90,7 +90,7 @@ jobs:
 
   deploy:
       name: Deploy Application
-      needs: [node_modules, build, test, release-project, genrate-application]
+      needs: [node_modules, build, release-project, genrate-application]
       runs-on: ${{ matrix.os }}
       strategy:
         matrix:
